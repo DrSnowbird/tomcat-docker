@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/bin/bash -x
 
-if [ ! -f /.tomcat_admin_created ]; then
-    /create_tomcat_admin_user.sh
+if [ $# -gt 0 ]; then
+    docker run -d -p 8080:8080 -e TOMCAT_PASS="$1" openkbs/jre-tomcat
+else
+    docker run -d -p 8080:8080 openkbs/jre-tomcat
 fi
 
-exec ${CATALINA_HOME}/bin/catalina.sh run

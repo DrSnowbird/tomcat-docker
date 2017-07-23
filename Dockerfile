@@ -9,7 +9,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 ENV TOMCAT_MAJOR_VERSION 8
-ENV TOMCAT_MINOR_VERSION 8.0.35
+ENV TOMCAT_MINOR_VERSION 8.0.45
 ENV CATALINA_HOME /tomcat
 
 WORKDIR /
@@ -22,10 +22,10 @@ RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION
     mv apache-tomcat* tomcat
 
 ADD create_tomcat_admin_user.sh /create_tomcat_admin_user.sh
-ADD run.sh /run.sh
+ADD entry.sh /entry.sh
 RUN chmod +x /*.sh
 
 RUN ls -al /
 
 EXPOSE 8080
-CMD ["/run.sh", "run"]
+CMD ["/entry.sh", "run"]
