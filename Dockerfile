@@ -1,4 +1,4 @@
-FROM openkbs/jre-base
+FROM openkbs/jdk-mvn-py3
 
 MAINTAINER openkbs
 
@@ -8,16 +8,25 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-ENV TOMCAT_MAJOR_VERSION 8
-ENV TOMCAT_MINOR_VERSION 8.0.45
-ENV CATALINA_HOME /tomcat
+ENV TOMCAT_MAJOR_VERSION=8
+ENV TOMCAT_MINOR_VERSION=8.5.33
+ENV CATALINA_HOME=/tomcat
 ENV TOMCAT_PASS=${TOMCAT_PASS}
 
 WORKDIR /
 
 # INSTALL TOMCAT
-RUN wget -q https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
-    wget -qO- https://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
+#ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
+ENV DOWNLOAD_BASE_URL=http://apache.cs.utah.edu
+#ENV DOWNLOAD_BASE_URL=http://mirrors.advancedhosters.com/apache
+
+# http://mirrors.advancedhosters.com/apache/tomcat/tomcat-8/v8.5.33/bin/apache-tomcat-8.5.33.tar.gz
+# http://apache.cs.utah.edu/tomcat/tomcat-8/v8.5.33/bin/apache-tomcat-8.5.33.tar.gz
+
+RUN echo "${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz"
+
+RUN wget ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
+##    wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
     tar zxf apache-tomcat-*.tar.gz && \
     rm apache-tomcat-*.tar.gz && \
     mv apache-tomcat* tomcat
