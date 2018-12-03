@@ -1,0 +1,7 @@
+<Context privileged="true" antiResourceLocking="false" docBase="${catalina.home}/webapps/manager/META-INF/context.xml">
+    <!-- Dev node only! Deployment: NEED to comment this and use next line to lock down to localhost access only -->
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="^.*$" />
+    <!-- 
+    <Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+    -->
+</Context>

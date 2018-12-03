@@ -1,7 +1,6 @@
-# openkbs/jre-tomcat
-===================
+# Tomcat 8 + Java JDK 8 + Maven 3 + Python
 
-To run openkbs/jre-tomcat image
+# Run
 -------------------------------------------------
 ```
     docker run -d -p 8080:8080 openkbs/jre-tomcat

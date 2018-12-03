@@ -1,0 +1,8 @@
+*.class
+*.log
+*\~
+*.swp
+.fuse*
+
+*.SAVE
+test-keystore*
