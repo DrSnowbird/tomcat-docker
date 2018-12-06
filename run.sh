@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 MY_DIR=$(dirname "$(readlink -f "$0")")
 
@@ -297,12 +297,12 @@ echo "---------------------------------------------"
 echo "---- Starting a Container for ${imageTag}"
 echo "---------------------------------------------"
 
-#cleanup
+cleanup
 
 #### run restart options: { no, on-failure, unless-stopped, always }
 RESTART_OPTION=no
 
-docker run -it \
+docker run --rm -it \
     --name=${instanceName} \
     --restart=${RESTART_OPTION} \
     ${privilegedString} \

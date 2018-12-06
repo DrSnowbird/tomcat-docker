@@ -20,8 +20,18 @@ ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-8.5.35}
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
 
-ENV TOMCAT_PASS=${TOMCAT_PASS:-password12345}
-ENV KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"changeIt!"}
+ARG TOMCAT_HTTPS_ENABLED=${TOMCAT_HTTPS_ENABLED:-0}
+ENV TOMCAT_HTTPS_ENABLED=${TOMCAT_HTTPS_ENABLED}
+
+ARG CATALINA_WEBAPPS=${CATALINA_WEBAPPS:-${CATALINA_HOME}/webapps}
+ENV CATALINA_WEBAPPS=${CATALINA_WEBAPPS}
+
+## -- Tomcat Console admin password --
+ENV TOMCAT_PASSWORD=${TOMCAT_PASSWORD:-password12345}
+
+## -- Tomcat HTTPS Keystore password --
+ARG KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"ChangeMe!"}
+ENV KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
 
 ## -- 5.) Product Download Mirror site: -- ##
 # https://downloads.sourceforge.net/project/bigdata/bigdata/2.1.4/blazegraph.tar.gz
@@ -51,7 +61,7 @@ RUN wget --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJO
 #### -----------------------------
 #### ---- Configuration/Setup ----
 #### -----------------------------
-COPY ./entry.sh /entry.sh
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 
 COPY bin/create_tomcat_admin_user.sh ${CATALINA_HOME}/create_tomcat_admin_user.sh
 COPY bin/setup-https-tomcat.sh ${CATALINA_HOME}/setup-https-tomcat.sh
@@ -89,18 +99,18 @@ RUN \
 #### ------------------------
 #### ---- Ports  :       ----
 #### ------------------------
-ENV TOMCAT_PORT=${TOMCAT_PORT:-8080}
+ENV TOMCAT_PORT_HTTP=${TOMCAT_PORT_HTTP:-8080}
 ENV TOMCAT_PORT_HTTPS=${TOMCAT_PORT_HTTPS:-8443}
-EXPOSE ${TOMCAT_PORT}
+EXPOSE ${TOMCAT_PORT_HTTP}
 EXPOSE ${TOMCAT_PORT_HTTPS}
 
 #### ------------------------
 #### ---- Start Tomcat:  ----
 #### ------------------------
 
-RUN chown -R ${USER_NAME}:${USER_NAME} ${CATALINA_HOME} /entry.sh
+RUN chown -R ${USER_NAME}:${USER_NAME} ${CATALINA_HOME} /docker-entrypoint.sh
 USER ${USER_NAME}
 WORKDIR ${HOME}
 
-ENTRYPOINT ["/entry.sh","${TOMCAT_PASS}"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 

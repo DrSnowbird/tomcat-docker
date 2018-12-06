@@ -5,4 +5,7 @@
 .fuse*
 
 *.SAVE
-test-keystore*
+test-*
+*-test*
+*-bad*
+*original2*
