@@ -109,10 +109,12 @@ sed -i 's#redirectPort="8443"#redirectPort="'${TOMCAT_PORT_HTTPS}'"#g' ${CATALIN
 sed -i 's#8080#'${TOMCAT_PORT_HTTP}'#g' ${CATALINA_HOME}/conf/server.xml  
 sed -i 's#8443#'${TOMCAT_PORT_HTTPS}'#g' ${CATALINA_HOME}/conf/server.xml  
 
+echo "================== ${CATALINA_HOME}/conf/server.xml ========================="
 cat  ${CATALINA_HOME}/conf/server.xml
-echo "=================================================================================="
+echo "================== ${CATALINA_HOME}/conf/server.xml.ORIGINAL ========================="
 cat  ${CATALINA_HOME}/conf/server.xml.ORIGINAL
-
+echo "================== ${CATALINA_HOME}/webapps/manager/META-INF/context.xml ========================="
+cat  ${CATALINA_HOME}/webapps/manager/META-INF/context.xml
 
 #For Tomcat to use https, we need to add a new connector (Tomcat 6 is not configured for SSL by default) and point it to the keystore. To do this, simply add the following lines to your server.xml, found at $CATALINA_HOME/conf/server.xml:
 

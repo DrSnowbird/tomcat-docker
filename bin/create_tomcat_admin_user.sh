@@ -35,21 +35,12 @@ echo "    admin : ${TOMCAT_PASSWORD}"
 echo ""
 echo "========================================================================"
 
-#### ---- Commented out for now ----
-runThis=1
+#### ---- Use Copy file instead (see Dockerfile COPY <...>/context.xml -----
+runThis=0
 if [ $runThis -gt 1 ]; then
-    echo "----------------------------------------------------------------"
-    echo "---- Setup Tomcat 8 to allow access Application Manager GUI ----"
-    echo "----------------------------------------------------------------"
-    #### Reference: https://itpeopleblog.wordpress.com/2018/03/19/access-tomcat8-application-manager-gui/
-    TOMCAT_PORT_HTTPS=${TOMCAT_PORT_HTTPS:-8443}
-    ## temparily hard-coded IP - TODO: change it to whatever
-    #HOST_IP_ADDRESS=${HOST_IP_ADDRESS:-"0.0.0.0"}
-    HOST_IP_ADDRESS="192.168.0.160"
-    HTTPS_CONNECTOR="redirectPort=\"${TOMCAT_PORT_HTTPS}\" address=\"${HOST_IP_ADDRESS}\" useIPVHosts=\"true\" />"
-    sed -i 's#redirectPort="8443"\s*/>#'"${HTTPS_CONNECTOR}"'#' ${CATALINA_HOME}/conf/server.xml 
-    #HOST_IP_ADDRESS=${HOST_IP_ADDRESS:-"0\.0\.0\.0"}
-#    HOST_IP_ADDRESS="192\.168\.0\.160"
-    sed -i 's#allow=\"127#allow=\"192.168.0.160|127#' ${CATALINA_HOME}/webapps/manager/META-INF/context.xml 
-#    sed -i 's#allow=\"127\\#allow=\"'"${HOST_IP_ADDRESS}"'|127\\#' ${CATALINA_HOME}/webapps/manager/META-INF/context.xml 
+    #### ---- For a manager to be accessible from any host/IP, you need to do the following.
+    sed -i '/<Context/a \<!--' ${CATALINA_HOME}/webapps/manager/META-INF/context.xml
+    sed -i '/<\/Context/i --\>' ${CATALINA_HOME}/webapps/manager/META-INF/context.xml  
+    MANAGER_FILTER="<Manager sessionAttributeValueClassNameFilter=\"java\\\\.lang\\\\.(?:Boolean|Integer|Long|Number|String)|org\\\\.apache\\\\.catalina\\\\.filters\\\\.CsrfPreventionFilter\\\\\$LruCache(?:\\\\\$1)?|java\\\\.util\\\\.(?:Linked)?HashMap\"/>"
+    sed -i '/<\/Context/i '"${MANAGER_FILTER}" ${CATALINA_HOME}/webapps/manager/META-INF/context.xml
 fi
