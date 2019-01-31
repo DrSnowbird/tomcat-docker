@@ -1,5 +1,15 @@
 # Tomcat 8 + Java JDK 8 + Maven 3 + Python
 
+# Components
+* java version "1.8.0_201"
+  Java(TM) SE Runtime Environment (build 1.8.0_201-b09)
+  Java HotSpot(TM) 64-Bit Server VM (build 25.201-b09, mixed mode)
+* Apache Maven 3.6.0
+* Python 3.5.2
+* node v11.7.0 + npm 6.5.0 (from NodeSource official Node Distribution)
+* Gradle 5.1
+* Other tools: git wget unzip vim python python-setuptools python-dev python-numpy 
+
 # Run
 -------------------------------------------------
 ```
