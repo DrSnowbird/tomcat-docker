@@ -14,7 +14,7 @@ echo "Starting docker process daemon ..."
 /bin/bash -c "${EXE_COMMAND:-echo Hello}"
 
 ${CATALINA_HOME}/bin/catalina.sh start
-sleep 10
+sleep 5
 ${CATALINA_HOME}/bin/catalina.sh stop
 
 echo "=============================================================="
@@ -47,23 +47,13 @@ EXE_PATTERN="catalina.sh"
 #### 0.) Setup needed stuffs, e.g., init db etc. ....
 #### (do something here for preparation if any)
     
-#### **** Allow non-root users to bind to use lower than 1000 ports **** ####
-#### **** (default=0 / off)
-USE_CAP_NET_BIND=${USE_CAP_NET_BIND:-0}
-if [ ${USE_CAP_NET_BIND} -gt 0 ]; then
-    sudo setcap 'cap_net_bind_service=+ep' ${EXE_COMMAND}
-fi
 
 #### 1.) Use cap_net_bind_service to allow Non-root user to access lower 1000 ports
 #exec ${CATALINA_HOME}/bin/catalina.sh run "$@"
 #exec authbind --deep ${CATALINA_HOME}/catalina.sh start "$@"
 exec ${CATALINA_HOME}/bin/catalina.sh run "$@"
 
-#### 2.A) As Root User -- Choose this or 2.B --####
-#### ---- Use this when running Root user ---- ####
-#exec ${CATALINA_HOME}/bin/catalina.sh run "$@"
-
-#### 2.B) As Non-Root User -- Choose this or 2.A  ---- #### 
+#### 2.) As Non-Root User -- Choose this or 2.A  ---- #### 
 #### ---- Use this when running Non-Root user ---- ####
 #### ---- Use gosu (or su-exec) to drop to a non-root user
 #exec gosu ${NON_ROOT_USER} ${CATALINA_HOME}/bin/catalina.sh run "$@"

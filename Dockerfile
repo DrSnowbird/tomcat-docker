@@ -14,8 +14,8 @@ RUN apt-get update \
 #### -----------------------------
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
-ENV TOMCAT_MAJOR_VERSION=8
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-8.5.35}
+ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.14}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
@@ -30,8 +30,11 @@ ENV CATALINA_WEBAPPS=${CATALINA_WEBAPPS}
 ENV TOMCAT_PASSWORD=${TOMCAT_PASSWORD:-password12345}
 
 ## -- Tomcat HTTPS Keystore password --
-ARG KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-"ChangeMe!"}
-ENV KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
+###################################################################################################
+#### Use Blank password to trigger the Strong Random password for HTTPS -- Highly Recommended! ####
+###################################################################################################
+ARG KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-}
+ENV KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-}
 
 ## -- 5.) Product Download Mirror site: -- ##
 # https://downloads.sourceforge.net/project/bigdata/bigdata/2.1.4/blazegraph.tar.gz
@@ -49,8 +52,8 @@ ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
 #ENV DOWNLOAD_BASE_URL=http://mirrors.advancedhosters.com/apache
 #ENV DOWNLOAD_BASE_URL=http://apache.cs.utah.edu
 
-# e.g. http://mirrors.advancedhosters.com/apache/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz
-# e.g. http://apache.cs.utah.edu/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz
+# e.g. http://mirrors.advancedhosters.com/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
+# e.g. http://apache.cs.utah.edu/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
 #
 RUN wget --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     ## wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
