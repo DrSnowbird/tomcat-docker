@@ -53,7 +53,7 @@ And, to run
     docker run -d -p 18880:8080 -p 18443:8443 openkbs/jdk-tomcat
 ```
 
-The first time that you run your container, a new user `admin` with default password `ChangeMeNow!` with all privileges
+The first time that you run your container, a new user `tomcat` with default password `ChangeMeNow!` with all privileges
 will be created in Tomcat with a random password. To get the password, check the logs
 of the container by running:
 
