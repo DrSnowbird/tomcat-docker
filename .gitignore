@@ -9,3 +9,5 @@ test-*
 *-test*
 *-bad*
 *original2*
+*tmp/
+*.tmp

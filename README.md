@@ -53,7 +53,7 @@ And, to run
     docker run -d -p 18880:8080 -p 18443:8443 openkbs/jdk-tomcat
 ```
 
-The first time that you run your container, a new user `admin` with default password `ChangeMeNow!` with all privileges
+The first time that you run your container, a new user `admin` (or tomcat) with default password `ChangeMeNow!` with all privileges
 will be created in Tomcat with a random password. To get the password, check the logs
 of the container by running:
 
@@ -78,7 +78,14 @@ You can now login to you admin console to configure your tomcat server:
 
 * Note: By default the Host Manager is only accessible from a browser running on the same machine as Tomcat (i.e. the Docker Container). If you wish to modify this restriction, you'll need to edit the Host Manager's context.xml file.
     
-## Setting a specific password for the admin account
+
+# Deploy an WAR file
+To deploy an WAR file, first make sure that you already started container and then just drop your WAR file into the `./deploy` directory, then run
+```
+./deploy.sh
+```
+
+# Setting a specific password for the admin account
 -------------------------------------------------
 
 If you want to use a preset password instead of a randomly generated one, you can
