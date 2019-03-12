@@ -9,10 +9,10 @@ services:
       - USER_ID=${USER_ID:-1000}
       - GROUP_ID=${GROUP_ID:-1000}
     env_file:
-      - ./.env
+      - ./docker.env
     ports:
-      - 8080:8080
-      - 8443:8443
+      - 18880:8080
+      - 18443:8443
     volumes:
       - ./workspace:/home/developer/workspace
 

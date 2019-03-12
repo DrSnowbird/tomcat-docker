@@ -2,6 +2,8 @@ FROM openkbs/jdk-mvn-py3
 
 MAINTAINER drsnowbird@openkbs.org
 
+USER root
+
 ##### update ubuntu
 RUN apt-get update \
   && apt-get install -yq --no-install-recommends pwgen sudo ca-certificates \
@@ -15,7 +17,7 @@ RUN apt-get update \
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
 ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.14}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.16}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
@@ -26,8 +28,8 @@ ENV TOMCAT_HTTPS_ENABLED=${TOMCAT_HTTPS_ENABLED}
 ARG CATALINA_WEBAPPS=${CATALINA_WEBAPPS:-${CATALINA_HOME}/webapps}
 ENV CATALINA_WEBAPPS=${CATALINA_WEBAPPS}
 
-## -- Tomcat Console admin password --
-ENV TOMCAT_PASSWORD=${TOMCAT_PASSWORD:-password12345}
+## -- Tomcat Console admin (user: tomcat) password --
+ENV TOMCAT_PASSWORD=${TOMCAT_PASSWORD:-ChageMeNow!}
 
 ## -- Tomcat HTTPS Keystore password --
 ###################################################################################################
@@ -55,7 +57,7 @@ ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
 # e.g. http://mirrors.advancedhosters.com/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
 # e.g. http://apache.cs.utah.edu/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
 #
-RUN wget --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
+RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     ## wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
     tar zxf apache-tomcat-*.tar.gz && \
     rm apache-tomcat-*.tar.gz && \
@@ -75,30 +77,31 @@ COPY config/webapps_manager_META-INF_context.xml ${CATALINA_HOME}/webapps/manage
 #### ------------------------
 #### ---- user: Non-Root ----
 #### ------------------------
-ENV USER_NAME=${USER_NAME:-tomcat}
-ENV HOME=/home/${USER_NAME}
+ENV USER=tomcat
+ENV HOME=/home/${USER}
 
-ARG USER_ID=${USER_ID:-1000}
-ENV USER_ID=${USER_ID}
+ARG USER_ID=1001
+ENV USER_ID=1001
 
-ARG GROUP_ID=${GROUP_ID:-1000}
-ENV GROUP_ID=${GROUP_ID}
+ARG GROUP_ID=1001
+ENV GROUP_ID=1001
 
-RUN \
-    groupadd -g ${GROUP_ID} ${USER_NAME} && \
-    useradd -d ${HOME} -s /bin/bash -u ${USER_ID} -g ${USER_NAME} ${USER_NAME} && \
-    usermod -aG root ${USER_NAME} && \
+RUN groupadd -g ${GROUP_ID} ${USER} && \
+    useradd -d ${HOME} -s /bin/bash -u ${USER_ID} -g ${USER} ${USER} && \
+    usermod -aG root ${USER} && \
     export uid=${USER_ID} gid=${GROUP_ID} && \
     mkdir -p ${HOME} && \
     mkdir -p ${HOME}/workspace && \
     mkdir -p /etc/sudoers.d && \
-    echo "${USER_NAME}:x:${USER_ID}:${GROUP_ID}:${USER_NAME},,,:${HOME}:/bin/bash" >> /etc/passwd && \
-    echo "${USER_NAME}:x:${USER_ID}:" >> /etc/group && \
-    echo "${USER_NAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER_NAME} && \
-    chmod 0440 /etc/sudoers.d/${USER_NAME} && \
-    chown ${USER_NAME}:${USER_NAME} -R ${HOME} && \
+    echo "${USER}:x:${USER_ID}:${GROUP_ID}:${USER},,,:${HOME}:/bin/bash" >> /etc/passwd && \
+    echo "${USER}:x:${USER_ID}:" >> /etc/group && \
+    echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} && \
+    chmod 0440 /etc/sudoers.d/${USER} && \
+    chown ${USER}:${USER} -R ${HOME} && \
     apt-get clean all
     
+RUN chown -R ${USER}:${USER} ${CATALINA_HOME} ${CATALINA_HOME} /docker-entrypoint.sh
+
 #### ------------------------
 #### ---- Ports  :       ----
 #### ------------------------
@@ -111,9 +114,8 @@ EXPOSE ${TOMCAT_PORT_HTTPS}
 #### ---- Start Tomcat:  ----
 #### ------------------------
 
-RUN chown -R ${USER_NAME}:${USER_NAME} ${CATALINA_HOME} /docker-entrypoint.sh
-USER ${USER_NAME}
-WORKDIR ${HOME}
+USER ${USER}
+WORKDIR ${CATALINA_HOME}
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
