@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -e
 
@@ -110,12 +110,14 @@ BUILD_ARGS="--build-arg BUILD_DATE=${BUILD_DATE} --build-arg VCS_REF=${VCS_REF}"
 
 ## -- ignore entries start with "#" symbol --
 function generateBuildArgs() {
-    for r in `cat ${DOCKER_ENV_FILE} | grep -v '^#'`; do
-        echo "entry=> $r"
-        key=`echo $r | tr -d ' ' | cut -d'=' -f1`
-        value=`echo $r | tr -d ' ' | cut -d'=' -f2`
-        BUILD_ARGS="${BUILD_ARGS} --build-arg $key=$value"
-    done
+    if [ "${DOCKER_ENV_FILE}" != "" ] && [ ! -s "${DOCKER_ENV_FILE}" ]; then
+        for r in `cat ${DOCKER_ENV_FILE} | grep -v '^#'`; do
+            echo "entry=> $r"
+            key=`echo $r | tr -d ' ' | cut -d'=' -f1`
+            value=`echo $r | tr -d ' ' | cut -d'=' -f2`
+            BUILD_ARGS="${BUILD_ARGS} --build-arg $key=$value"
+        done
+    fi
 }
 generateBuildArgs
 echo "BUILD_ARGS=${BUILD_ARGS}"

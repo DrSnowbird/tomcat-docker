@@ -1,4 +1,4 @@
-# Tomcat 9.0.14 + Java JDK 8 + Maven 3 + Python
+# Tomcat 9.0.19 + Java JDK 8 + Maven 3 + Python
 [![](https://images.microbadger.com/badges/image/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own version badge on microbadger.com")
 
 # License Agreement
@@ -15,12 +15,19 @@ This image contains [Oracle JDK 8](http://www.oracle.com/technetwork/java/javase
 * Gradle 5.1
 * Other tools: git wget unzip vim python python-setuptools python-dev python-numpy 
 
+# Frist, clone the github git
+First, you need to clone the git:
+
+```
+    git clone https://github.com/DrSnowbird/jdk-tomcat.git
+```
+
 # Run (recommended for easy-start)
 
 ```
 ./run.sh
 ```
-Then, open Web Browser: with default password, `ChangeMeNow!`
+Then, open Web Browser: login `tomcat` (or `admin`) with default password, `ChangeMeNow!`
 ```
     http://<host_ip>:18880/
     or
@@ -34,15 +41,8 @@ Then, open Web Browser: with default password, `ChangeMeNow!`
     docker run -d -p 18880:8080 -p 18443:8443 openkbs/jdk-tomcat
 ```
 
-To build and run your local image
--------------------------------------------------
-First, you need to clone the git:
-
-```
-    git clone 
-```
-
-To create the image `openkbs/jdk-tomcat`, execute the following command:
+# Build and run your local image
+To create the image `openkbs/jdk-tomcat` (or change to your own name, e.g. `my/jdk-tomcat`), execute the following command:
 
 ```
     docker build -t openkbs/jdk-tomcat .
@@ -53,9 +53,8 @@ And, to run
     docker run -d -p 18880:8080 -p 18443:8443 openkbs/jdk-tomcat
 ```
 
-The first time that you run your container, a new user `admin (or tomcat)` with default password `ChangeMeNow!` with all privileges
-will be created in Tomcat with a random password. To get the password, check the logs
-of the container by running:
+The first time that you run your container, a new user `admin (or tomcat)` with default password `ChangeMeNow!` with all privileges will be created in Tomcat.
+However, it the password is not provided, then a random password will be generated. To get the random password, check the docker logs of the container by running:
 
 ```
     docker logs <CONTAINER_ID>
@@ -78,7 +77,6 @@ You can now login to you admin console to configure your tomcat server:
 
 * Note: By default the Host Manager is only accessible from a browser running on the same machine as Tomcat (i.e. the Docker Container). If you wish to modify this restriction, you'll need to edit the Host Manager's context.xml file.
     
-
 # Deploy an WAR file
 To deploy an WAR file, first make sure that you already started container and then just drop your WAR file into the `./deploy` directory, then run
 ```
@@ -101,9 +99,9 @@ You can now test your deployment for both HTTP and HTTPS:
     https://<host_ip>:18443/
 ```
 
-# Customized Build
-If you want to build Tomcat's container's internal HTTPS to run non-default (8443), e.g., 443 port, you need to build your own image with changing PORTS configuration in either ".env" or "Dockerfile".
-However, for external ports, you can just provide mapping to whatever ports you prefer.
+# Customized Configuration
+If you want to build Tomcat's container's internal HTTPS to run non-default (8443), e.g., 443 port, you need to build your own image with your customized PORTS configuration in Tomcat configuration files and modify the "Dockerfile" ports corresponding.
+However, for external ports, you can just provide mapping to whatever internal ports you change to.
 
 # Reference: 
 * [Apache Tomcat](https://tomcat.apache.org/)

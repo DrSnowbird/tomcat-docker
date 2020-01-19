@@ -17,12 +17,12 @@ RUN apt-get update \
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
 ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.16}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.30}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
 
-ARG TOMCAT_HTTPS_ENABLED=${TOMCAT_HTTPS_ENABLED:-0}
+ARG TOMCAT_HTTPS_ENABLED=${TOMCAT_HTTPS_ENABLED:-1}
 ENV TOMCAT_HTTPS_ENABLED=${TOMCAT_HTTPS_ENABLED}
 
 ARG CATALINA_WEBAPPS=${CATALINA_WEBAPPS:-${CATALINA_HOME}/webapps}
@@ -39,8 +39,6 @@ ARG KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-}
 ENV KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD:-}
 
 ## -- 5.) Product Download Mirror site: -- ##
-# https://downloads.sourceforge.net/project/bigdata/bigdata/2.1.4/blazegraph.tar.gz
-# https://downloads.sourceforge.net/project/blazegraph/blazegraph/2.1.4/blazegraph.tar.gz
 ARG PRODUCT_MIRROR_SITE_URL=${PRODUCT_MIRROR_SITE_URL:-https://downloads.sourceforge.net/project}
 
 #### -----------------------------
@@ -51,12 +49,8 @@ WORKDIR ${INSTALL_BASE}
 
 #### ---- Download URL ---- 
 ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
-#ENV DOWNLOAD_BASE_URL=http://mirrors.advancedhosters.com/apache
-#ENV DOWNLOAD_BASE_URL=http://apache.cs.utah.edu
 
-# e.g. http://mirrors.advancedhosters.com/apache/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
-# e.g. http://apache.cs.utah.edu/tomcat/tomcat-9/v9.0.14/bin/apache-tomcat-9.0.14.tar.gz
-#
+# e.g. https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.30/bin/apache-tomcat-9.0.30.tar.gz
 RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     ## wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
     tar zxf apache-tomcat-*.tar.gz && \
