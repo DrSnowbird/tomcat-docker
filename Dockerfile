@@ -10,14 +10,13 @@ RUN apt-get update \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
-
 #### -----------------------------
 #### ---- Specifications      ----
 #### -----------------------------
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
 ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.38}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.46}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
@@ -51,6 +50,7 @@ WORKDIR ${INSTALL_BASE}
 ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
 
 # e.g. https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.30/bin/apache-tomcat-9.0.30.tar.gz
+# https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.46/bin/apache-tomcat-9.0.46.tar.gz
 RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     ## wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
     tar zxf apache-tomcat-*.tar.gz && \
@@ -61,6 +61,7 @@ RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_M
 #### ---- Configuration/Setup ----
 #### -----------------------------
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+COPY scripts/launch_tomcat.sh /launch_tomcat.sh
 
 COPY bin/create_tomcat_admin_user.sh ${CATALINA_HOME}/create_tomcat_admin_user.sh
 COPY bin/setup-https-tomcat.sh ${CATALINA_HOME}/setup-https-tomcat.sh
@@ -94,7 +95,7 @@ RUN groupadd -g ${GROUP_ID} ${USER} && \
     chown ${USER}:${USER} -R ${HOME} && \
     apt-get clean all
     
-RUN chown -R ${USER}:${USER} ${CATALINA_HOME} ${CATALINA_HOME} /docker-entrypoint.sh
+RUN sudo chown -R ${USER}:${USER} ${CATALINA_HOME} /docker-entrypoint.sh
 
 #### ------------------------
 #### ---- Ports  :       ----
@@ -112,4 +113,6 @@ USER ${USER}
 WORKDIR ${CATALINA_HOME}
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["/launch_tomcat.sh"]
 
