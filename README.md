@@ -71,8 +71,9 @@ You can now login to you admin console to configure your tomcat server:
 
 * Note: By default the Host Manager is only accessible from a browser running on the same machine as Tomcat (i.e. the Docker Container). If you wish to modify this restriction, you'll need to edit the Host Manager's context.xml file.
     
-# Deploy an WAR file
-To deploy an WAR file, first make sure that you already started container and then just drop your WAR file into the `./deploy` directory, then run
+# Deploy a WAR file
+You can deploy additional WAR files in this Docker Container.
+To deploy an WAR file, first make sure that you already started container and then just drop your WAR file into the `./deploy` directory, then run the command below. You can deploy multiple WAR files by drop all of them into the deploy directory.
 ```
 ./deploy.sh
 ```
