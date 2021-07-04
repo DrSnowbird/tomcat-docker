@@ -16,7 +16,7 @@ RUN apt-get update \
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
 ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.46}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.48}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
@@ -28,7 +28,7 @@ ARG CATALINA_WEBAPPS=${CATALINA_WEBAPPS:-${CATALINA_HOME}/webapps}
 ENV CATALINA_WEBAPPS=${CATALINA_WEBAPPS}
 
 ## -- Tomcat Console admin (user: tomcat) password --
-ENV TOMCAT_PASSWORD=${TOMCAT_PASSWORD:-ChangeMeNow!}
+#NV TOMCAT_PASSWORD=${TOMCAT_PASSWORD:-ChangeMeNow!}
 
 ## -- Tomcat HTTPS Keystore password --
 ###################################################################################################
@@ -108,6 +108,7 @@ EXPOSE ${TOMCAT_PORT_HTTPS}
 #### ------------------------
 #### ---- Start Tomcat:  ----
 #### ------------------------
+RUN ls -al /docker-entrypoint.sh
 
 USER ${USER}
 WORKDIR ${CATALINA_HOME}

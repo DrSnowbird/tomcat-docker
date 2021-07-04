@@ -4,7 +4,6 @@ set -e
 whoami
 
 env | sort
-
 echo "Inputs: $*"
 
 function launch_tomcat() {
@@ -24,6 +23,7 @@ function launch_tomcat() {
     echo "=============================================================="
     echo "=========== Setup Tomcat Admin/User configuration: ==========="
     echo "=============================================================="
+    env | grep -i PASS
     ${CATALINA_HOME}/create_tomcat_admin_user.sh ${TOMCAT_PASSWORD}
 
     echo "=================================================="
