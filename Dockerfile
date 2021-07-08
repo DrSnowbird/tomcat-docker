@@ -1,5 +1,7 @@
-FROM openkbs/jdk-mvn-py3
-
+ARG JDK_VERSION=${JDK_VERSION:-openkbs/jdk11-mvn-py3}
+#FROM openkbs/jdk11-mvn-py3
+#FROM openkbs/jdk-mvn-py3
+FROM ${JDK_VERSION}
 MAINTAINER drsnowbird@openkbs.org
 
 USER root
