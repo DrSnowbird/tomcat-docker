@@ -18,7 +18,7 @@ RUN apt-get update \
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
 ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.48}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.50}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/
@@ -49,10 +49,12 @@ ARG PRODUCT_MIRROR_SITE_URL=${PRODUCT_MIRROR_SITE_URL:-https://downloads.sourcef
 WORKDIR ${INSTALL_BASE}
 
 #### ---- Download URL ---- 
-ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
+#ENV DOWNLOAD_BASE_URL=http://www-us.apache.org/dist
+ENV DOWNLOAD_BASE_URL=https://archive.apache.org/dist
 
 # e.g. https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.30/bin/apache-tomcat-9.0.30.tar.gz
 # https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.46/bin/apache-tomcat-9.0.46.tar.gz
+# https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.50/bin/apache-tomcat-9.0.50.tar.gz
 RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     ## wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
     tar zxf apache-tomcat-*.tar.gz && \
