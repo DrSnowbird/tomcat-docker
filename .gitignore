@@ -11,3 +11,5 @@ test-*
 *original2*
 *tmp/
 *.tmp
+
+*java11*
