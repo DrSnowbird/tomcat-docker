@@ -56,4 +56,4 @@ replaceValueInConfig ${CONFIG_FILE} "PRODUCT_VERSION" ${PRODUCT_VERSION}
 #ARG PRODUCT_TAR_GZ_URL=https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.12/bin/apache-tomcat-10.0.12.tar.gz
 replaceValueInConfig ${CONFIG_FILE} "PRODUCT_TAR_GZ_URL" ${PRODUCT_TAR_GZ_URL}
 
-#make build
+make build
