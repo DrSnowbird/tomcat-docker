@@ -1,19 +1,27 @@
-# Tomcat 9 + Java OpenJDK 8 + Maven 3 + Python 3
+# Apache Tomcat 10 + Java OpenJDK 11 + Maven 3 + Python 3
 [![](https://images.microbadger.com/badges/image/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own version badge on microbadger.com")
 
-# License Agreement
-By using this image, you agree the [Oracle Java JDK License](http://www.oracle.com/technetwork/java/javase/terms/license/index.html).
-This image contains [Oracle JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html). You must accept the [Oracle Binary Code License Agreement for Java SE](http://www.oracle.com/technetwork/java/javase/terms/license/index.html) to use this image.
-
 # Components:
-* [Base Container Image: openkbs/jdk-mvn-py3](https://github.com/DrSnowbird/jdk-mvn-py3)
-* [Base Components: OpenJDK, Python 3, PIP, Node/NPM, Gradle, Maven, etc.](https://github.com/DrSnowbird/jdk-mvn-py3#components)
+
+* [Base Container Image: openkbs/java11-non-root3](https://github.com/DrSnowbird/java11-non-root)
+* [Apache Tomcat 10](https://tomcat.apache.org/download-10.cgi)
 
 # Frist, clone the github git
-First, you need to clone the git:
 
 ```
     git clone https://github.com/DrSnowbird/jdk-tomcat.git
+```
+
+# NOTICE: Due to docker.hub.io not allowing free hosting anymore, you have to make your local build including the parent images:
+- [DrSnowbird/java11-non-root](https://github.com/DrSnowbird/java11-non-root), [GIT](git@github.com:DrSnowbird/java11-non-root.git)
+For older version, the parent Container images are either of these two below:
+- [DrSnowbird/jdk11-mvn-py3](https://github.com/DrSnowbird/jdk11-mvn-py3), [GIT](git@github.com:DrSnowbird/jdk11-mvn-py3.git)
+- [DrSnowbird/jdk-mvn-py3](https://github.com/DrSnowbird/jdk-mvn-py3), [GIT](git@github.com:DrSnowbird/jdk-mvn-py3.git)
+
+# Build
+You can build your own image locally.
+```
+./build.sh
 ```
 
 # Run (recommended for easy-start)
@@ -21,7 +29,7 @@ First, you need to clone the git:
 ```
 ./run.sh
 ```
-Then, open Web Browser: login `tomcat` (or `admin`) with default password, `ChangeMeNow!`
+Then, open Web Browser: login `tomcat` (or `admin`) with default password, `password`
 ```
     http://<host_ip>:18880/
     or
