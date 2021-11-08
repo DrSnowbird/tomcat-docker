@@ -106,7 +106,6 @@ EXPOSE ${TOMCAT_PORT_HTTPS}
 #### ------------------------
 #### ---- Start Tomcat:  ----
 #### ------------------------
-RUN ls -al /docker-entrypoint.sh
 
 USER ${USER}
 WORKDIR ${CATALINA_HOME}

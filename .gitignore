@@ -13,3 +13,4 @@ test-*
 *.tmp
 
 *java11*
+*.swo
