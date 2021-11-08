@@ -1,4 +1,6 @@
-FROM openkbs/jdk-mvn-py3
+#FROM openkbs/jdk-mvn-py3
+#FROM openkbs/jdk11-mvn-py3
+FROM openkbs/java11-non-root
 
 MAINTAINER drsnowbird@openkbs.org
 
