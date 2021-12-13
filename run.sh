@@ -142,19 +142,18 @@ function check_NVIDIA() {
         fi
     fi
 }
-check_NVIDIA
-echo "GPU_OPTION= ${GPU_OPTION}"
+#check_NVIDIA
+#echo "GPU_OPTION= ${GPU_OPTION}"
 
 echo "$@"
 
 ## ------------------------------------------------------------------------
 ## Change to one (1) if run.sh needs to use host's user/group to run the Container
-## Valid "USER_VARS_NEEDED" values: 
+## Valid "USER_OPTIONS_NEEDED" values: 
 ##    0: (default) Not using host's USER / GROUP ID
 ##    1: Yes, using host's USER / GROUP ID for Container running.
 ## ------------------------------------------------------------------------
-USER_VARS_NEEDED=0
-
+USER_OPTIONS_NEEDED=1
 
 ## ------------------------------------------------------------------------
 ## More optional values:
@@ -324,6 +323,20 @@ function detectDockerRunEnvFile() {
 }
 detectDockerRunEnvFile
 
+################################################
+#### ---- USER_OPTIONS: Optional setup:---- ####
+################################################
+USER_OPTION=
+function user_ids_options() {
+    #USER_OPTIONS="--user $(id -g):$(id -u)"
+    USER_ID=`cat ${DOCKER_ENV_FILE} | grep  "^USER_ID=" | cut -d'=' -f2 | sed 's/ *$//g'`
+    GROUP_ID=`cat ${DOCKER_ENV_FILE} | grep  "^GROUP_ID=" | cut -d'=' -f2 | sed 's/ *$//g'`
+    if [ "${USER_ID}" != "" ] && [ "${USER_ID}" != "" ]; then
+        USER_OPTIONS="--user ${USER_ID:-$(id -g)}:${GROUP_ID:-$(id -u)}"
+    fi
+}
+user_ids_options
+
 ###################################################
 #### ---- Function: Generate volume mappings  ----
 ####      (Don't change!)
@@ -364,12 +377,12 @@ function cutomizedVolume() {
 
 function checkHostVolumePath() {
     _left=$1
-    mkdir -p ${_left}
-    sudo chown -R $USER:$USER ${_left}
     if [ -s ${_left} ]; then 
         ls -al ${_left}
-    else 
-        echo "*** ERROR: ${_left}: Not existing!"
+    else
+        echo "--- checkHostVolumePath: ${_left}: Not existing!"
+        mkdir -p ${_left}
+	sudo chown -R $USER_ID:$USER_ID ${_left}
     fi
 }
 
@@ -443,9 +456,7 @@ function generateVolumeMapping() {
             ## -- pattern like: "data"
             debug "-- default sub-directory (without prefix absolute path) --"
             VOLUME_MAP="${VOLUME_MAP} -v ${LOCAL_VOLUME_DIR}/$vol:${DOCKER_VOLUME_DIR}/$vol"
-            if [ ! -s ${LOCAL_VOLUME_DIR}/$vol ]; then
-                mkdir -p ${LOCAL_VOLUME_DIR}/$vol
-            fi
+            checkHostVolumePath "${LOCAL_VOLUME_DIR}/$vol"
             if [ $DEBUG -gt 0 ]; then ls -al ${LOCAL_VOLUME_DIR}/$vol; fi
         fi       
         echo ">>> expanded VOLUME_MAP: ${VOLUME_MAP}"
@@ -509,15 +520,6 @@ function generateEnvVars() {
         #productEnvVars=`grep -E "^[[:blank:]]*$1[a-zA-Z0-9_]+[[:blank:]]*=[[:blank:]]*[a-zA-Z0-9_]+[[:blank:]]*" ${DOCKER_ENV_FILE}`
         productEnvVars=`grep -E "^[[:blank:]]*$1.+[[:blank:]]*=[[:blank:]]*.+[[:blank:]]*" ${DOCKER_ENV_FILE} | grep -v "^#"`
     fi
-    for vars in 
-        do
-        echo "Line=$line"
-        key=${line%=*}
-        value=${line#*=}
-        #key=$(eval echo $value)
-        #ENV_VARS="${ENV_VARS} -e ${line%=*}=$(eval echo $value)"
-        ENV_VARS="${ENV_VARS} -e ${line}"
-    done
     ENV_VARS_STRING=""
     for vars in ${productEnvVars// /}; do
         debug "Entry => $vars"
@@ -691,13 +693,6 @@ echo "---------------------------------------------"
 
 cleanup
 
-#################################
-## -- USER_VARS into Docker -- ##
-#################################
-if [ ${USER_VARS_NEEDED} -gt 0 ]; then
-    USER_VARS="--user $(id -u $USER)"
-fi
-
 echo "--------------------------------------------------------"
 echo "==> Commands to manage Container:"
 echo "--------------------------------------------------------"
@@ -815,7 +810,7 @@ case "${BUILD_TYPE}" in
             ${GPU_OPTION} \
             ${REMOVE_OPTION} ${RUN_OPTION} ${MORE_OPTIONS} ${CERTIFICATE_OPTIONS} \
             ${privilegedString} \
-            ${USER_VARS} \
+            ${USER_OPTIONS} \
             ${ENV_VARS} \
             ${VOLUME_MAP} \
             ${PORT_MAP} \
@@ -840,7 +835,7 @@ case "${BUILD_TYPE}" in
             ${REMOVE_OPTION} ${RUN_OPTION} ${MORE_OPTIONS} ${CERTIFICATE_OPTIONS} \
             ${X11_OPTION} \
             ${privilegedString} \
-            ${USER_VARS} \
+            ${USER_OPTIONS} \
             ${ENV_VARS} \
             ${VOLUME_MAP} \
             ${PORT_MAP} \
@@ -861,9 +856,10 @@ case "${BUILD_TYPE}" in
         docker run \
             --name=${instanceName} \
             --restart=${RESTART_OPTION} \
+            ${GPU_OPTION} \
             ${REMOVE_OPTION} ${RUN_OPTION} ${MORE_OPTIONS} ${CERTIFICATE_OPTIONS} \
             ${privilegedString} \
-            ${USER_VARS} \
+            ${USER_OPTIONS} \
             ${ENV_VARS} \
             ${VOLUME_MAP} \
             ${PORT_MAP} \

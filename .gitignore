@@ -13,4 +13,7 @@ test-*
 *.tmp
 
 *java11*
+*.zip
+
+# tmp files:
 *.swo

@@ -1,9 +1,14 @@
 #!/bin/bash -x
 
 set -e
+
+echo ">>>>>>>>>>>>>>>>>>>>>>>> whoami: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> (start)"
 whoami
+id
+echo ">>>>>>>>>>>>>>>>>>>>>>>> whoami: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> (end)"
 
 env | sort
+
 echo "Inputs: $*"
 
 function launch_tomcat() {
