@@ -5,16 +5,34 @@ services:
     build:
       context: ./Dockerfile
     container_name: jdk-tomcat
-    environment:
-      - USER_ID=${USER_ID:-1000}
-      - GROUP_ID=${GROUP_ID:-1000}
     env_file:
       - ./.env
+    environment:
+      - USER_ID=${USER_ID:-1001}
+      - GROUP_ID=${GROUP_ID:-1001}
+      # - APP_HOME=${APP_HOME:-/home/developer/app}
+      # - APP_MAIN=${APP_MAIN:-setup.sh}
+      - DOCKER_HOST_IP=${DOCKER_HOST_IP:-127.0.0.1}
+      - DOCKER_HOST_NAME=${DOCKER_HOST_NAME:-localhost}
+      - HOSTNAME=myhost
+    volumes:
+      ## ==== Common mapping ====
+      #- /etc/hosts:/etc/hosts
+      #- /dev/shm:/dev/shm 
+      #- /var/run/docker.sock:/var/run/docker.sock
+      ## ==== RDF4J Setup: ====
+      ## (make sure you manually create directory below before you run docker-compose!!)
+      ## (mkdir -p ./data and then change to owner 1001:1001 to work correctly)
+      ## ==== Use $HOME/data-docker/rdf4j-docker for mapping Volumes ====
+      ## (You need to manually create those child directory: ./data, ./workspace, and others)
+      #- ./data:/home/tomcat/.RDF4J
+      - ./workspace:/home/tomcat/workspace
+      #- $HOME/data-docker/rdf4j-docker/data:/home/tomcat/data
+      #- $HOME/data-docker/rdf4j-docker/workspace:/home/tomcat/workspace
+      ## ==== Special Volume for RDF4J Repositories
+      #- rdf4j_volume:/home/tomcat/.RDF4J:rw
+
     ports:
       - 18880:8080
       - 18443:8443
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/home/developer/data
-      - ./workspace:/home/developer/workspace
 
