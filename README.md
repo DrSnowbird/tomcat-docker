@@ -1,4 +1,10 @@
-# Apache Tomcat 10 + Java OpenJDK 11 + Maven 3 + Python 3
+# ###############################
+# Notice: (Retiring this project)
+# PLEASE: use the newer project:
+# => DrSnowbird/tomcat-docker
+# ###############################
+
+Apache Tomcat 9 + Java OpenJDK 11 + Maven 3 + Python 3
 [![](https://images.microbadger.com/badges/image/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own version badge on microbadger.com")
 
 # Components:
