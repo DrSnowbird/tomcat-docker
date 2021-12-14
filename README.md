@@ -1,7 +1,6 @@
 # ###############################
 # Notice: (Retiring this project)
-# PLEASE: use the newer project:
-# => DrSnowbird/tomcat-docker
+# PLEASE: use the newer project(https://github.com/DrSnowbird/tomcat-docker)
 # ###############################
 
 Apache Tomcat 9 + Java OpenJDK 11 + Maven 3 + Python 3
