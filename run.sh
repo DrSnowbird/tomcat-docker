@@ -178,8 +178,7 @@ USER_OPTIONS_NEEDED=1
 ##   Add any additional options here
 ## ------------------------------------------------------------------------
 #MORE_OPTIONS="--privileged=true"
-#MORE_OPTIONS="--ipc=host --shm-size 4g"
-MORE_OPTIONS="--ipc=host"
+MORE_OPTIONS=
 
 ## ------------------------------------------------------------------------
 ## Multi-media optional values:
@@ -807,22 +806,6 @@ function setupCorporateCertificates() {
 }
 setupCorporateCertificates
 
-
-##################################################
-## ---- Setup accessing HOST's /etc/hosts: ---- ##
-##################################################
-## **************** WARNING: *********************
-## **************** WARNING: *********************
-## **************** WARNING: *********************
-#  => this might open up more attack surface since
-#   /etc/hosts has other nodes IP/name information
-# ------------------------------------------------
-if [ ${HOST_USE_IP_OR_NAME} -eq 2 ]; then
-    HOSTS_OPTIONS="-h ${HOST_NAME} -v /etc/hosts:/etc/hosts "
-else
-    # default use HOST_IP
-    HOSTS_OPTIONS="-h ${HOST_IP} -v /etc/hosts:/etc/hosts "
-fi
 
 ##################################################
 ##################################################
