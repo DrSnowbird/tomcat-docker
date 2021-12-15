@@ -23,8 +23,8 @@ echo '<role rolename="manager-jmx"/>' >> ${CATALINA_HOME}/conf/tomcat-users.xml
 echo '<role rolename="manager-status"/>' >> ${CATALINA_HOME}/conf/tomcat-users.xml
 echo '<role rolename="admin-gui"/>' >> ${CATALINA_HOME}/conf/tomcat-users.xml
 echo '<role rolename="admin-script"/>' >> ${CATALINA_HOME}/conf/tomcat-users.xml
-echo "<user username=\"tomcat\" password=\"${TOMCAT_PASSWORD}\" roles=\"manager-gui\"/>" >> ${CATALINA_HOME}/conf/tomcat-users.xml
-echo "<user username=\"admin\" password=\"${TOMCAT_PASSWORD}\" roles=\"manager-gui\"/>" >> ${CATALINA_HOME}/conf/tomcat-users.xml
+echo "<user username=\"tomcat\" password=\"${TOMCAT_PASSWORD}\" roles=\"admin-gui,manager-gui\"/>" >> ${CATALINA_HOME}/conf/tomcat-users.xml
+echo "<user username=\"admin\" password=\"${TOMCAT_PASSWORD}\" roles=\"admin-gui,manager-gui\"/>" >> ${CATALINA_HOME}/conf/tomcat-users.xml
 echo '</tomcat-users>' >> ${CATALINA_HOME}/conf/tomcat-users.xml 
 echo "=> Done!"
 echo "admin:${TOMCAT_PASSWORD}" > ${CATALINA_HOME}/tomcat_admin_password
