@@ -1,6 +1,6 @@
 #FROM openkbs/jdk-mvn-py3
 #FROM openkbs/jdk11-mvn-py3
-FROM openkbs/java11-non-root
+FROM openkbs/java11-nonroot-docker
 
 MAINTAINER drsnowbird@openkbs.org
 
@@ -18,7 +18,7 @@ RUN apt-get update \
 ARG INSTALL_BASE=${INSTALL_BASE:-/opt}
 
 ENV TOMCAT_MAJOR_VERSION=${TOMCAT_MAJOR_VERSION:-9}
-ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.54}
+ENV TOMCAT_MINOR_VERSION=${TOMCAT_MINOR_VERSION:-9.0.56}
 
 ENV CATALINA_HOME=${INSTALL_BASE}/tomcat
 ENV TOMCAT_HOME=${CATALINA_HOME}/

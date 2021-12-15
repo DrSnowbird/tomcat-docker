@@ -1,10 +1,10 @@
-version: '3' 
+version: '3.1' 
 services:
-  jdk-tomcat:
-    image: openkbs/jdk-tomcat
+  tomcat-docker:
+    image: openkbs/tomcat-docker
     build:
       context: ./Dockerfile
-    container_name: jdk-tomcat
+    container_name: tomcat-docker
     env_file:
       - ./.env
     environment:
@@ -25,7 +25,7 @@ services:
       ## (mkdir -p ./data and then change to owner 1001:1001 to work correctly)
       ## ==== Use $HOME/data-docker/rdf4j-docker for mapping Volumes ====
       ## (You need to manually create those child directory: ./data, ./workspace, and others)
-      #- ./data:/home/tomcat/.RDF4J
+      - ./data-rdf4j:/home/tomcat/.RDF4J
       - ./workspace:/home/tomcat/workspace
       #- $HOME/data-docker/rdf4j-docker/data:/home/tomcat/data
       #- $HOME/data-docker/rdf4j-docker/workspace:/home/tomcat/workspace
@@ -33,6 +33,5 @@ services:
       #- rdf4j_volume:/home/tomcat/.RDF4J:rw
 
     ports:
-      - 18880:8080
+      - 18080:8080
       - 18443:8443
-

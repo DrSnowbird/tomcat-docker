@@ -4,7 +4,7 @@
 # ###############################
 
 Apache Tomcat 9 + Java OpenJDK 11 + Maven 3 + Python 3
-[![](https://images.microbadger.com/badges/image/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openkbs/jdk-tomcat.svg)](https://microbadger.com/images/openkbs/jdk-tomcat "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/openkbs/tomcat-docker.svg)](https://microbadger.com/images/openkbs/tomcat-docker "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/openkbs/tomcat-docker.svg)](https://microbadger.com/images/openkbs/tomcat-docker "Get your own version badge on microbadger.com")
 
 # Components:
 
@@ -14,7 +14,7 @@ Apache Tomcat 9 + Java OpenJDK 11 + Maven 3 + Python 3
 # Frist, clone the github git
 
 ```
-    git clone https://github.com/DrSnowbird/jdk-tomcat.git
+    git clone https://github.com/DrSnowbird/tomcat-docker.git
 ```
 
 # NOTICE: Due to docker.hub.io not allowing free hosting anymore, you have to make your local build including the parent images:
@@ -45,22 +45,22 @@ Then, open Web Browser: login `tomcat` (or `admin`) with default password, `pass
 
 -------------------------------------------------
 ```
-    docker run -d -p 18880:8080 -p 18443:8443 openkbs/jdk-tomcat
+    docker run -d -p 18880:8080 -p 18443:8443 openkbs/tomcat-docker
 ```
 
 # Build and run your local image
-To create the image `openkbs/jdk-tomcat` (or change to your own name, e.g. `my/jdk-tomcat`), execute the following command:
+To create the image `openkbs/tomcat-docker` (or change to your own name, e.g. `my/tomcat-docker`), execute the following command:
 
 ```
-    docker build -t openkbs/jdk-tomcat .
+    docker build -t openkbs/tomcat-docker .
 ```
 And, to run
 
 ```
-    docker run -d -p 18880:8080 -p 18443:8443 openkbs/jdk-tomcat
+    docker run -d -p 18880:8080 -p 18443:8443 openkbs/tomcat-docker
 ```
 
-The first time that you run your container, a new user `admin (or tomcat)` with default password `ChangeMeNow!` with all privileges will be created in Tomcat.
+The first time that you run your container, a new user `admin (or tomcat)` with default password `password` with all privileges will be created in Tomcat.
 However, it the password is not provided, then a random password will be generated. To get the random password, check the docker logs of the container by running:
 
 ```
@@ -97,7 +97,7 @@ To deploy an WAR file, first make sure that you already started container and th
 If you want to use a preset password instead of a randomly generated one, you can
 set the environment variable `TOMCAT_PASSWORD` to your specific password when running the container:
 ```
-    docker run -d -p 8080:8080 -p 8443:8443-e TOMCAT_PASSWORD="mypass" openkbs/jdk-tomcat
+    docker run -d -p 8080:8080 -p 8443:8443-e TOMCAT_PASSWORD="mypass" openkbs/tomcat-docker
 ```
 
 You can now test your deployment for both HTTP and HTTPS:
