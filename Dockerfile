@@ -49,8 +49,10 @@ WORKDIR ${INSTALL_BASE}
 ENV DOWNLOAD_BASE_URL=https://dlcdn.apache.org
 
 # https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.46/bin/apache-tomcat-9.0.54.tar.gz
-RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
+#RUN wget -q --no-check-certificate ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz && \
     ## wget -qO- ${DOWNLOAD_BASE_URL}/tomcat/tomcat-${TOMCAT_MAJOR_VERSION}/v${TOMCAT_MINOR_VERSION}/bin/apache-tomcat-${TOMCAT_MINOR_VERSION}.tar.gz.md5 | md5sum -c - && \
+
+RUN wget -q --no-check-certificate $(curl -k -s https://tomcat.apache.org/download-90.cgi | grep '.tar.gz' | head -1 | cut -d'"' -f2) && \
     tar zxf apache-tomcat-*.tar.gz && \
     rm apache-tomcat-*.tar.gz && \
     mv apache-tomcat* tomcat
